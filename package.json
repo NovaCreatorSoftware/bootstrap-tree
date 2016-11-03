@@ -1,0 +1,68 @@
+{
+  "name": "novacreator-bootstrap-tree",
+  "namespace": "novacreator.bootstrap.tree",
+  "title": "Nova Creator Bootstrap Tree",
+  "version": "1.0.0",
+  "description": "Tree based on Bootstrap.",
+  "homepage": "https://github.com/NovaCreatorSoftware/bootstrap-tree",
+  "author": {
+    "name": "Nova Creator Software",
+    "email": "cristimanole@novacreator.com",
+    "url": "http://www.novacreator.com"
+  },
+  "bugs": "https://github.com/NovaCreatorSoftware/bootstrap-tree/issues",
+  "scripts": {
+    "test": "grunt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NovaCreatorSoftware/bootstrap-tree.git"
+  },
+  "keywords": [
+	"Bootstrap",
+	"jQuery",
+	"Plugin",
+	"jquery-plugin",
+	"Component",
+	"Control",
+	"UI",
+	"Data",
+	"Tree",
+	"Table",
+	"Sorting",
+	"HTML5",
+	"Treely"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/MIT"
+    }
+  ],
+  "dependencies": {
+    "jquery": ">=3.1.1",
+    "bootstrap": ">=3.3.6"
+  },
+  "devDependencies": {
+    "grunt": "~1.0.1",
+    "grunt-bower-concat": "^1.0.0",
+    "grunt-build-control": "^0.7.0",
+    "grunt-cli": "~1.2.0",
+    "grunt-contrib-clean": "~1.0.0",
+    "grunt-contrib-compress": "~1.3.0",
+    "grunt-contrib-concat": "~1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-csslint": "~1.0.0",
+    "grunt-contrib-cssmin": "~1.0.1",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-less": "~1.3.0",
+    "grunt-contrib-qunit": "~1.2.0",
+    "grunt-contrib-uglify": "~1.0.1",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-contrib-yuidoc": "~1.0.0",
+    "grunt-exec": "~0.4.5",
+    "grunt-nuget": "~0.1.4",
+    "grunt-regex-replace": "~0.2.6"
+  },
+  "readmeFilename": "README.md"
+}

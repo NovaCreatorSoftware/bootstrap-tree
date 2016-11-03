@@ -1,0 +1,360 @@
+{
+    "project": {
+        "name": "novacreator-bootstrap-tree",
+        "description": "Tree based on Bootstrap.",
+        "version": "1.0.0",
+        "url": "https://github.com/NovaCreatorSoftware/bootstrap-tree"
+    },
+    "files": {
+        "dist/js/dependencies.js": {
+            "name": "dist/js/dependencies.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {},
+    "elements": {},
+    "classitems": [
+        {
+            "file": "dist/js/dependencies.js",
+            "line": 893,
+            "description": "Create key-value caches of limited size",
+            "return": {
+                "description": "Returns the Object data after storing it on itself with\n\tproperty name the (space-suffixed) string and (if the cache is larger than Expr.cacheLength)\n\tdeleting the oldest entry",
+                "type": "Function(string, object)"
+            },
+            "class": ""
+        },
+        {
+            "file": "dist/js/dependencies.js",
+            "line": 913,
+            "description": "Mark a function for special use by Sizzle",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "The function to mark",
+                    "type": "Function"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "dist/js/dependencies.js",
+            "line": 922,
+            "description": "Support testing using an element",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "Passed the created element and returns a boolean result",
+                    "type": "Function"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "dist/js/dependencies.js",
+            "line": 943,
+            "description": "Adds the same handler for all of the specified attrs",
+            "params": [
+                {
+                    "name": "attrs",
+                    "description": "Pipe-separated list of attributes",
+                    "type": "String"
+                },
+                {
+                    "name": "handler",
+                    "description": "The method that will be applied",
+                    "type": "Function"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "dist/js/dependencies.js",
+            "line": 957,
+            "description": "Checks document order of two siblings",
+            "params": [
+                {
+                    "name": "a",
+                    "description": "",
+                    "type": "Element"
+                },
+                {
+                    "name": "b",
+                    "description": "",
+                    "type": "Element"
+                }
+            ],
+            "return": {
+                "description": "Returns less than 0 if a precedes b, greater than 0 if a follows b",
+                "type": "Number"
+            },
+            "class": ""
+        },
+        {
+            "file": "dist/js/dependencies.js",
+            "line": 985,
+            "description": "Returns a function to use in pseudos for input types",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "dist/js/dependencies.js",
+            "line": 996,
+            "description": "Returns a function to use in pseudos for buttons",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "dist/js/dependencies.js",
+            "line": 1007,
+            "description": "Returns a function to use in pseudos for :enabled/:disabled",
+            "params": [
+                {
+                    "name": "disabled",
+                    "description": "true for :disabled; false for :enabled",
+                    "type": "Boolean"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "dist/js/dependencies.js",
+            "line": 1063,
+            "description": "Returns a function to use in pseudos for positionals",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "dist/js/dependencies.js",
+            "line": 1085,
+            "description": "Checks a node for validity as a Sizzle context",
+            "params": [
+                {
+                    "name": "context",
+                    "description": "",
+                    "type": "Element|Object="
+                }
+            ],
+            "return": {
+                "description": "The input node if acceptable, otherwise a falsy value",
+                "type": "Element|Object|Boolean"
+            },
+            "class": ""
+        },
+        {
+            "file": "dist/js/dependencies.js",
+            "line": 1097,
+            "description": "Detects XML nodes",
+            "params": [
+                {
+                    "name": "elem",
+                    "description": "An element or a document",
+                    "type": "Element|Object"
+                }
+            ],
+            "return": {
+                "description": "True iff elem is a non-HTML XML node",
+                "type": "Boolean"
+            },
+            "class": ""
+        },
+        {
+            "file": "dist/js/dependencies.js",
+            "line": 1109,
+            "description": "Sets document-related variables once based on the current document",
+            "params": [
+                {
+                    "name": "doc",
+                    "description": "An element or document object to use to set the document",
+                    "type": "Element|Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "Returns the current document",
+                "type": "Object"
+            },
+            "class": ""
+        },
+        {
+            "file": "dist/js/dependencies.js",
+            "line": 1589,
+            "description": "Document sorting and removing duplicates",
+            "params": [
+                {
+                    "name": "results",
+                    "description": "",
+                    "type": "ArrayLike"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "dist/js/dependencies.js",
+            "line": 1622,
+            "description": "Utility function for retrieving the text value of an array of DOM nodes",
+            "params": [
+                {
+                    "name": "elem",
+                    "description": "",
+                    "type": "Array|Element"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "dist/js/dependencies.js",
+            "line": 2653,
+            "description": "A low-level selection function that works with Sizzle's compiled\n selector functions",
+            "params": [
+                {
+                    "name": "selector",
+                    "description": "A selector or a pre-compiled\n selector function built with Sizzle.compile",
+                    "type": "String|Function"
+                },
+                {
+                    "name": "context",
+                    "description": "",
+                    "type": "Element"
+                },
+                {
+                    "name": "results",
+                    "description": "",
+                    "type": "Array",
+                    "optional": true
+                },
+                {
+                    "name": "seed",
+                    "description": "A set of elements to match against",
+                    "type": "Array",
+                    "optional": true
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "dist/js/dependencies.js",
+            "line": 9787,
+            "description": "Load a url into a page",
+            "class": ""
+        },
+        {
+            "file": "dist/js/dependencies.js",
+            "line": 9879,
+            "description": "Gets a window from an element",
+            "class": ""
+        }
+    ],
+    "warnings": [
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " dist/js/dependencies.js:893"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " dist/js/dependencies.js:957"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " dist/js/dependencies.js:1085"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " dist/js/dependencies.js:1097"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " dist/js/dependencies.js:1109"
+        },
+        {
+            "message": "Missing item type\nCreate key-value caches of limited size",
+            "line": " dist/js/dependencies.js:893"
+        },
+        {
+            "message": "Missing item type\nMark a function for special use by Sizzle",
+            "line": " dist/js/dependencies.js:913"
+        },
+        {
+            "message": "Missing item type\nSupport testing using an element",
+            "line": " dist/js/dependencies.js:922"
+        },
+        {
+            "message": "Missing item type\nAdds the same handler for all of the specified attrs",
+            "line": " dist/js/dependencies.js:943"
+        },
+        {
+            "message": "Missing item type\nChecks document order of two siblings",
+            "line": " dist/js/dependencies.js:957"
+        },
+        {
+            "message": "Missing item type\nReturns a function to use in pseudos for input types",
+            "line": " dist/js/dependencies.js:985"
+        },
+        {
+            "message": "Missing item type\nReturns a function to use in pseudos for buttons",
+            "line": " dist/js/dependencies.js:996"
+        },
+        {
+            "message": "Missing item type\nReturns a function to use in pseudos for :enabled/:disabled",
+            "line": " dist/js/dependencies.js:1007"
+        },
+        {
+            "message": "Missing item type\nReturns a function to use in pseudos for positionals",
+            "line": " dist/js/dependencies.js:1063"
+        },
+        {
+            "message": "Missing item type\nChecks a node for validity as a Sizzle context",
+            "line": " dist/js/dependencies.js:1085"
+        },
+        {
+            "message": "Missing item type\nDetects XML nodes",
+            "line": " dist/js/dependencies.js:1097"
+        },
+        {
+            "message": "Missing item type\nSets document-related variables once based on the current document",
+            "line": " dist/js/dependencies.js:1109"
+        },
+        {
+            "message": "Missing item type\nDocument sorting and removing duplicates",
+            "line": " dist/js/dependencies.js:1589"
+        },
+        {
+            "message": "Missing item type\nUtility function for retrieving the text value of an array of DOM nodes",
+            "line": " dist/js/dependencies.js:1622"
+        },
+        {
+            "message": "Missing item type\nA low-level selection function that works with Sizzle's compiled\n selector functions",
+            "line": " dist/js/dependencies.js:2653"
+        },
+        {
+            "message": "Missing item type\nLoad a url into a page",
+            "line": " dist/js/dependencies.js:9787"
+        },
+        {
+            "message": "Missing item type\nGets a window from an element",
+            "line": " dist/js/dependencies.js:9879"
+        }
+    ]
+}
