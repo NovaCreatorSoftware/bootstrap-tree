@@ -31,7 +31,7 @@ $.fn.treely = function(options) {
 		editable: false,
 		addable: false,
 		doOnDoubleTap: function() {
-			alert('novadoubletap dblclick');
+			window.alert('novadoubletap dblclick');
 		},
 		i18n: {
 			deleteNull: 'Delete null',
