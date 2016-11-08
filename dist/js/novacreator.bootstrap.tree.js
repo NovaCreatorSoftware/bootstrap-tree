@@ -1,5 +1,5 @@
 /*! 
- * Nova Creator Bootstrap Tree v1.0.0 - 11/07/2016
+ * Nova Creator Bootstrap Tree v1.0.0 - 11/08/2016
  * Copyright (c) 2015-2016 Nova Creator Software (https://github.com/NovaCreatorSoftware/bootstrap-tree)
  * Licensed under MIT http://www.opensource.org/licenses/MIT
  */
@@ -8,6 +8,7 @@
     /*jshint validthis: true */
     "use strict";
 
+/*jshint esversion: 6 */
 (function($) {
 $.event.special.novadoubletap = {
 	bindType: 'touchend',
@@ -40,8 +41,12 @@ $.fn.treely = function(options) {
 		deletable: false,
 		editable: false,
 		addable: false,
+		dynamicContent: true,
 		doOnDoubleTap: function() {
 			window.alert('novadoubletap dblclick');
+		},
+		getData: function(dataCallback, itemId) {
+			dataCallback.call(this, []);
 		},
 		i18n: {
 			deleteNull: 'Delete null',
@@ -50,8 +55,8 @@ $.fn.treely = function(options) {
 			editNull: 'Edit null',
 			editMultiple: 'Edit multiple',
 			addMultiple: 'Add multiple',
-			collapseTip: 'Collapse',
-			expandTip: 'Expand',
+			collapseTip: 'Click to Collapse',
+			expandTip: 'Click to Expand',
 			selectTip: 'Select',
 			unselectTip: 'Deselect',
 			editTip: 'Edit',
@@ -68,36 +73,42 @@ $.fn.treely = function(options) {
 
 	options = $.extend(defaults, options);
 
+	var appendItem = function(item) {
+		var itemText = "<li " + (item.type === 'folder' ? "class='parent_li' " : '') + "data-id='" + item.id + "' data-type='"+ item.type +"'>" + 
+			'<span' + (item.type === 'folder' ? ' title="' + options.i18n.collapseTip + '"' : '') +'>' + 
+				'<span class="glyphicon ' + (item.type === 'folder' ? 'glyphicon-folder-open' : 'glyphicon-file') +
+				'"></span>' + 
+				'<a href="javascript: void(0);"> ' + item.name + '</a>' +   
+			'</span>'; 
+		if(item.type === "folder") {
+			itemText += "<ul>";
+			if(item.items && item.items.length > 0) {
+				$.each(item.items, function(index, value) {
+					itemText += appendItem(value);					
+				});
+			}
+			itemText += "</ul>";
+		} 
+		itemText += "</li>";
+		return itemText;
+	};
+	
+	var getSelectedItems = function(treely) {
+		return treely.find('li.li_selected');
+	};
+		
 	this.each(function() {
 		var treely = $(this);
-
-		var getSelectedItems = function() {
-			return $(treely).find('li.li_selected');
-		};
-
-		$.each($(treely).find('ul > li'), function() {
-			var text;
-			if($(this).is('li:has(ul)')) {
-				var children = $(this).find(' > ul');
-				$(children).remove();
-				text = $(this).text();
-				$(this).html('<span><span class="glyphicon"></span><a href="javascript: void(0);"></a> </span>');
-				$(this).find(' > span > span').addClass('glyphicon-folder-open');
-				$(this).find(' > span > a').text(text);
-				$(this).append(children);
-			} else {
-				text = $(this).text();
-				$(this).html('<span><span class="glyphicon"></span><a href="javascript: void(0);"></a> </span>');
-				$(this).find(' > span > span').addClass('glyphicon-file');
-				$(this).find(' > span > a').text(text);
-			}
-		});
-
-		$(treely).find('li:has(ul)').addClass('parent_li').find(' > span').attr('title', options.i18n.collapseTip);
-
+		
 		if(options.deletable || options.editable || options.addable) {
-			$(treely).prepend('<div class="treely-toolbar"></div> ');
+			treely.append('<div class="treely-toolbar"></div><div class="padding"></div>');
 		}
+
+		options.getData(function(items) {
+			$.each(items, function(index, value) {
+				treely.append("<ul>" + appendItem(value) + "</ul>");
+			});
+		});
 
 		if(options.addable) {
 			$(treely).find('.treely-toolbar').append('<div class="create"><button class="btn btn-default btn-sm btn-success"><span class="glyphicon glyphicon-plus"></span></button></div> ');
@@ -110,12 +121,13 @@ $.fn.treely = function(options) {
 					if($(createInput).find('input').val() === '') {
 						return;
 					}
-					var selected = getSelectedItems();
+					var selected = getSelectedItems($(treely));
 					var item = $('<li><span><span class="glyphicon glyphicon-file"></span><a href="javascript: void(0);">' + $(createInput).find('input').val() + '</a> </span></li>');
 					$(item).find(' > span > span').attr('title', options.i18n.collapseTip);
 					$(item).find(' > span > a').attr('title', options.i18n.selectTip);
 					if(selected.length <= 0) {
-						$(treely).find(' > ul').append($(item));
+						$(treely).append("<ul></ul>");
+						$(treely).find(' > ul:last').append($(item));
 					} else if(selected.length > 1) {
 						$(treely).prepend(warningAlert);
 						$(treely).find('.alert .alert-content').text(options.i18n.addMultiple);
@@ -142,7 +154,7 @@ $.fn.treely = function(options) {
 							}
 
 							if(options.deletable || options.editable || options.addable) {
-								var selected = getSelectedItems();
+								var selected = getSelectedItems($(treely));
 								if(options.editable) {
 									if(selected.length <= 0 || selected.length > 1) {
 										$(treely).find('.treely-toolbar .edit > button').addClass('disabled');
@@ -177,7 +189,7 @@ $.fn.treely = function(options) {
 			$(treely).find('.treely-toolbar .edit > button').attr('title', options.i18n.editTip).on("click touchstart", function() {
 				$(treely).find('input.treely-editor').remove();
 				$(treely).find('li > span > a:hidden').show();
-				var selected = getSelectedItems();
+				var selected = getSelectedItems($(treely));
 				if(selected.length <= 0) {
 					$(treely).prepend(warningAlert);
 					$(treely).find('.alert .alert-content').html(options.i18n.editNull);
@@ -211,7 +223,7 @@ $.fn.treely = function(options) {
 		if(options.deletable) {
 			$(treely).find('.treely-toolbar').append('<div class="remove"><button class="btn btn-default btn-sm btn-danger disabled"><span class="glyphicon glyphicon-remove"></span></button></div> ');
 			$(treely).find('.treely-toolbar .remove > button').attr('title', options.i18n.deleteTip).on("click touchstart", function() {
-				var selected = getSelectedItems();
+				var selected = getSelectedItems($(treely));
 				if(selected.length <= 0) {
 					$(treely).prepend(warningAlert);
 					$(treely).find('.alert .alert-content').html(options.i18n.deleteNull);
@@ -236,18 +248,51 @@ $.fn.treely = function(options) {
 		//collapse or expand
 		$(treely).on('click touchstart', 'li.parent_li > span', function(event) {
 			var children = $(this).parent('li.parent_li').find(' > ul > li');
-			if(children.is(':visible')) {
-				children.hide('fast');
-				$(this).attr('title', options.i18n.expandTip)
-					.find(' > span.glyphicon')
-					.addClass('glyphicon-folder-close')
-					.removeClass('glyphicon-folder-open');
+			if(children.length > 0) {
+				if(children.is(':visible')) {
+					children.hide('fast');
+					if(options.dynamicContent) {
+						children.remove();
+					}
+					$(this).attr('title', options.i18n.expandTip)
+						.find(' > span.glyphicon')
+						.addClass('glyphicon-folder-close')
+						.removeClass('glyphicon-folder-open');
+				} else {
+					children.show('fast');
+					$(this).attr('title', options.i18n.collapseTip)
+						.find(' > span.glyphicon')
+						.addClass('glyphicon-folder-open')
+						.removeClass('glyphicon-folder-close');
+					if(options.dynamicContent) {
+						var parentItem = children.parent();
+						options.getData(function(items) {
+							$.each(items, function(index, value) {
+								parentItem.append("<ul>" + appendItem(value) + "</ul>");
+							});
+						}, parentItem.data('id'));
+					}
+				}
 			} else {
-				children.show('fast');
-				$(this).attr('title', options.i18n.collapseTip)
-					.find(' > span.glyphicon')
-					.addClass('glyphicon-folder-open')
-					.removeClass('glyphicon-folder-close');
+				if($(this).find(' > span.glyphicon').hasClass('glyphicon-folder-close')) {
+					if(options.dynamicContent) {
+						var parent = $(this).parent('li.parent_li');
+						options.getData(function(items) {
+							$.each(items, function(index, value) {
+								parent.append("<ul>" + appendItem(value) + "</ul>");
+							});
+						}, parent.data('id'));
+					}
+					$(this).attr('title', options.i18n.collapseTip)
+						.find(' > span.glyphicon')
+						.addClass('glyphicon-folder-open')
+						.removeClass('glyphicon-folder-close');
+				} else {
+					$(this).attr('title', options.i18n.expandTip)
+						.find(' > span.glyphicon')
+						.addClass('glyphicon-folder-close')
+						.removeClass('glyphicon-folder-open');
+				}
 			}
 			event.stopPropagation();
 		});
@@ -266,7 +311,7 @@ $.fn.treely = function(options) {
 				}
 
 				if(options.deletable || options.editable || options.addable) {
-					var selected = getSelectedItems();
+					var selected = getSelectedItems($(treely));
 					if(options.editable) {
 						if(selected.length <= 0 || selected.length > 1) {
 							$(treely).find('.treely-toolbar .edit > button').addClass('disabled');

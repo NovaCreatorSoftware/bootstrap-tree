@@ -12,64 +12,7 @@
 
 <div style="margin: 0 auto; float: none; padding-left: 5px; padding-right: 5px; width: 320px">
     <h3>Treely Example</h3>
-    <div class="treely">
-    	<div class="padding"></div>
-        <ul>
-            <li>Example 1</li>
-            <li>Example 2</li>
-            <li>Example 3
-            	<ul>
-                    <li>Example 1</li>
-                    <li>Example 2
-                        <ul>
-                            <li>Example 1
-		                        <ul>
-		                            <li>Example 1
-				                        <ul>
-				                            <li>Example 1
-						                        <ul>
-						                            <li>Example 1</li>
-						                            <li>Example 2</li>
-						                            <li>Example 3</li>
-						                            <li>Example 4</li>
-						                        </ul>
-					                        </li>
-				                            <li>Example 2</li>
-				                            <li>Example 3</li>
-				                            <li>Example 4</li>
-				                        </ul>
-				                    </li>
-		                            <li>Example 2</li>
-		                            <li>Example 3</li>
-		                            <li>Example 4</li>
-		                        </ul>
-							</li>                            
-                            <li>Example 2</li>
-                            <li>Example 3</li>
-                            <li>Example 4</li>
-                        </ul>
-                    </li>
-                    <li>Example 3</li>
-                    <li>Example 4</li>
-                </ul>
-            </li>
-            <li>Example 0
-                <ul>
-                    <li>Example 1</li>
-                    <li>Example 2</li>
-                    <li>Example 3</li>
-                    <li>Example 4
-                        <ul>
-                            <li>Example 1</li>
-                            <li>Example 2</li>
-                            <li>Example 3</li>
-                            <li>Example 4</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </div>
+    <div class="treely"></div>
 </div>
 
 <footer id="footer">&copy; Copyright 2015-2016, Nova Creator Software</footer>
@@ -83,10 +26,67 @@
 <script src="js/novacreator.bootstrap.tree.js"></script>
 <script>
 $(function() {
+	var items = [{
+		id: 1,
+		name: 'Example 1',
+		type: 'folder',
+		items: [{
+			id: 11,
+			name: 'Example 11',
+			type: 'folder',
+			items: [{
+				id: 111,
+				name: 'Example 111',
+				type: 'file'
+			}, {
+				id: 112,
+				name: 'Example 112',
+				type: 'file'
+			}]
+		}, {
+			id: 12,
+			name: 'Example 12',
+			type: 'folder',
+			items: [{
+				id: 121,
+				name: 'Example 121',
+				type: 'file'
+			}, {
+				id: 122,
+				name: 'Example 122',
+				type: 'file'
+			}]
+		}, {
+			id: 13,
+			name: 'Example 13',
+			type: 'folder',
+			items: [{
+				id: 131,
+				name: 'Example 131',
+				type: 'file'
+			}, {
+				id: 132,
+				name: 'Example 132',
+				type: 'file'
+			}]
+		}]
+	}, {
+		id: 2,
+		name: 'Example 2',
+		type: 'file'
+	}, {
+		id: 3,
+		name: 'Example 3',
+		type: 'folder'
+	}];
+
 	$('.treely').treely({
 		addable: true,
 		editable: true,
-		deletable: true
+		deletable: true,
+		getData: function(dataCallback, itemId) {
+			dataCallback.call(this, items);
+		}
 	});
 });
 </script>
