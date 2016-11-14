@@ -42,8 +42,14 @@ $.fn.treely = function(options) {
 		editable: false,
 		addable: false,
 		dynamicContent: true,
-		doOnDoubleTap: function() {
-			window.alert('novadoubletap dblclick');
+		doOnDoubleTap: function(itemId) {
+			window.alert('Doubleclicked / double tapped on itemId=' + itemId);
+		},
+		doOnItemSelected: function(itemId) {
+			window.alert('selected ' + itemId);
+		},
+		doOnItemDeselected: function(itemId) {
+			window.alert('deselected ' + itemId);
 		},
 		getData: function(dataCallback, itemId) {
 			dataCallback.call(this, []);
@@ -76,17 +82,16 @@ $.fn.treely = function(options) {
 	var appendItem = function(item) {
 		var itemText = "<li " + (item.type === 'folder' ? "class='parent_li' " : '') + "data-id='" + item.id + "' data-type='"+ item.type +"'>" + 
 			'<span' + (item.type === 'folder' ? ' title="' + options.i18n.collapseTip + '"' : '') +'>' + 
-				'<span class="glyphicon ' + (item.type === 'folder' ? 'glyphicon-folder-open' : 'glyphicon-file') +
+				'<span class="glyphicon ' + 
+					(item.type === 'folder' ? (item.items ? 'glyphicon-folder-open' : 'glyphicon-folder-close') : 'glyphicon-file') +
 				'"></span>' + 
 				'<a href="javascript: void(0);"> ' + item.name + '</a>' +   
 			'</span>'; 
-		if(item.type === "folder") {
+		if(item.type === "folder" && item.items && item.items.length > 0) {
 			itemText += "<ul>";
-			if(item.items && item.items.length > 0) {
-				$.each(item.items, function(index, value) {
-					itemText += appendItem(value);					
-				});
-			}
+			$.each(item.items, function(index, value) {
+				itemText += appendItem(value);
+			});
 			itemText += "</ul>";
 		} 
 		itemText += "</li>";
@@ -105,15 +110,19 @@ $.fn.treely = function(options) {
 		}
 
 		options.getData(function(items) {
-			$.each(items, function(index, value) {
-				treely.append("<ul>" + appendItem(value) + "</ul>");
-			});
+			if(items && items.length > 0) {
+				treely.append("<ul>");
+				$.each(items, function(index, value) {
+					treely.append(appendItem(value));
+				});
+				treely.append("</ul>");
+			}
 		});
 
 		if(options.addable) {
-			$(treely).find('.treely-toolbar').append('<div class="create"><button class="btn btn-default btn-sm btn-success"><span class="glyphicon glyphicon-plus"></span></button></div> ');
-			$(treely).find('.treely-toolbar .create > button').attr('title', options.i18n.addTip).on("click touchstart", function() {
-				var createBlock = $(treely).find('.treely-toolbar .create');
+			treely.find('.treely-toolbar').append('<div class="create"><button class="btn btn-default btn-sm btn-success"><span class="glyphicon glyphicon-plus"></span></button></div> ');
+			treely.find('.treely-toolbar .create > button').attr('title', options.i18n.addTip).on("click touchstart", function() {
+				var createBlock = treely.find('.treely-toolbar .create');
 				$(createBlock).append(createInput);
 				$(createInput).find('input').focus();
 				$(createInput).find('.confirm').text(options.i18n.confirmButtonLabel);
@@ -121,16 +130,16 @@ $.fn.treely = function(options) {
 					if($(createInput).find('input').val() === '') {
 						return;
 					}
-					var selected = getSelectedItems($(treely));
+					var selected = getSelectedItems(treely);
 					var item = $('<li><span><span class="glyphicon glyphicon-file"></span><a href="javascript: void(0);">' + $(createInput).find('input').val() + '</a> </span></li>');
 					$(item).find(' > span > span').attr('title', options.i18n.collapseTip);
 					$(item).find(' > span > a').attr('title', options.i18n.selectTip);
 					if(selected.length <= 0) {
-						$(treely).append("<ul></ul>");
-						$(treely).find(' > ul:last').append($(item));
+						treely.append("<ul></ul>");
+						treely.find(' > ul:last').append($(item));
 					} else if(selected.length > 1) {
-						$(treely).prepend(warningAlert);
-						$(treely).find('.alert .alert-content').text(options.i18n.addMultiple);
+						treely.prepend(warningAlert);
+						treely.find('.alert .alert-content').text(options.i18n.addMultiple);
 					} else {
 						if($(selected).hasClass('parent_li')) {
 							$(selected).find(' > ul').append(item);
@@ -142,32 +151,32 @@ $.fn.treely = function(options) {
 					$(createInput).find('input').val('');
 					if(options.selectable) {
 						$(item).find(' > span > a').attr('title', options.i18n.selectTip);
-						$(item).find(' > span > a').on("click touchstart", function(event) {
+						$(item).on("click touchstart", ' > span > a', function(event) {
 							var li = $(this).parent().parent();
 							if(li.hasClass('li_selected')) {
 								$(this).attr('title', options.i18n.selectTip);
 								$(li).removeClass('li_selected');
 							} else {
-								$(treely).find('li.li_selected').removeClass('li_selected');
+								treely.find('li.li_selected').removeClass('li_selected');
 								$(this).attr('title', options.i18n.unselectTip);
 								$(li).addClass('li_selected');
 							}
 
 							if(options.deletable || options.editable || options.addable) {
-								var selected = getSelectedItems($(treely));
+								var selected = getSelectedItems(treely);
 								if(options.editable) {
 									if(selected.length <= 0 || selected.length > 1) {
-										$(treely).find('.treely-toolbar .edit > button').addClass('disabled');
+										treely.find('.treely-toolbar .edit > button').addClass('disabled');
 									} else {
-										$(treely).find('.treely-toolbar .edit > button').removeClass('disabled');
+										treely.find('.treely-toolbar .edit > button').removeClass('disabled');
 									}
 								}
 
 								if(options.deletable) {
 									if(selected.length <= 0 || selected.length > 1) {
-										$(treely).find('.treely-toolbar .remove > button').addClass('disabled');
+										treely.find('.treely-toolbar .remove > button').addClass('disabled');
 									} else {
-										$(treely).find('.treely-toolbar .remove > button').removeClass('disabled');
+										treely.find('.treely-toolbar .remove > button').removeClass('disabled');
 									}
 								}
 							}
@@ -185,17 +194,17 @@ $.fn.treely = function(options) {
 		}
 
 		if(options.editable) {
-			$(treely).find('.treely-toolbar').append('<div class="edit"><button class="btn btn-default btn-sm btn-primary disabled"><span class="glyphicon glyphicon-edit"></span></button></div> ');
-			$(treely).find('.treely-toolbar .edit > button').attr('title', options.i18n.editTip).on("click touchstart", function() {
-				$(treely).find('input.treely-editor').remove();
-				$(treely).find('li > span > a:hidden').show();
-				var selected = getSelectedItems($(treely));
+			treely.find('.treely-toolbar').append('<div class="edit"><button class="btn btn-default btn-sm btn-primary disabled"><span class="glyphicon glyphicon-edit"></span></button></div> ');
+			treely.find('.treely-toolbar .edit > button').attr('title', options.i18n.editTip).on("click touchstart", function() {
+				treely.find('input.treely-editor').remove();
+				treely.find('li > span > a:hidden').show();
+				var selected = getSelectedItems(treely);
 				if(selected.length <= 0) {
-					$(treely).prepend(warningAlert);
-					$(treely).find('.alert .alert-content').html(options.i18n.editNull);
+					treely.prepend(warningAlert);
+					treely.find('.alert .alert-content').html(options.i18n.editNull);
 				} else if (selected.length > 1) {
-					$(treely).prepend(warningAlert);
-					$(treely).find('.alert .alert-content').html(options.i18n.editMultiple);
+					treely.prepend(warningAlert);
+					treely.find('.alert .alert-content').html(options.i18n.editMultiple);
 				} else {
 					var value = $(selected).find(' > span > a').text();
 					value = value && value.trim();
@@ -221,18 +230,18 @@ $.fn.treely = function(options) {
 		}
 
 		if(options.deletable) {
-			$(treely).find('.treely-toolbar').append('<div class="remove"><button class="btn btn-default btn-sm btn-danger disabled"><span class="glyphicon glyphicon-remove"></span></button></div> ');
-			$(treely).find('.treely-toolbar .remove > button').attr('title', options.i18n.deleteTip).on("click touchstart", function() {
-				var selected = getSelectedItems($(treely));
+			treely.find('.treely-toolbar').append('<div class="remove"><button class="btn btn-default btn-sm btn-danger disabled"><span class="glyphicon glyphicon-remove"></span></button></div> ');
+			treely.find('.treely-toolbar .remove > button').attr('title', options.i18n.deleteTip).on("click touchstart", function() {
+				var selected = getSelectedItems(treely);
 				if(selected.length <= 0) {
-					$(treely).prepend(warningAlert);
-					$(treely).find('.alert .alert-content').html(options.i18n.deleteNull);
+					treely.prepend(warningAlert);
+					treely.find('.alert .alert-content').html(options.i18n.deleteNull);
 				} else {
-					$(treely).prepend(dangerAlert);
-					$(treely).find('.alert .alert-content').html(options.i18n.deleteConfirmation)
+					treely.prepend(dangerAlert);
+					treely.find('.alert .alert-content').html(options.i18n.deleteConfirmation)
 						.append('<a style="margin-left: 10px;" class="btn btn-default btn-danger confirm"></a>')
 						.find('.confirm').html(options.i18n.confirmButtonLabel);
-					$(treely).find('.alert .alert-content .confirm').on("click touchstart", function() {
+					treely.find('.alert .alert-content .confirm').on("click touchstart", function() {
 						$(selected).find('ul').remove();
 						if($(selected).parent('ul').find(' > li').length <= 1) {
 							$(selected).parents('li').removeClass('parent_li').find(' > span > span').removeClass('glyphicon-folder-open').addClass('glyphicon-file');
@@ -246,13 +255,13 @@ $.fn.treely = function(options) {
 		}
 
 		//collapse or expand
-		$(treely).on('click touchstart', 'li.parent_li > span', function(event) {
+		treely.on('click touchstart', 'li.parent_li > span', function(event) {
 			var children = $(this).parent('li.parent_li').find(' > ul > li');
 			if(children.length > 0) {
 				if(children.is(':visible')) {
 					children.hide('fast');
 					if(options.dynamicContent) {
-						children.remove();
+						children.parent().remove();
 					}
 					$(this).attr('title', options.i18n.expandTip)
 						.find(' > span.glyphicon')
@@ -267,9 +276,13 @@ $.fn.treely = function(options) {
 					if(options.dynamicContent) {
 						var parentItem = children.parent();
 						options.getData(function(items) {
-							$.each(items, function(index, value) {
-								parentItem.append("<ul>" + appendItem(value) + "</ul>");
-							});
+							if(items && items.length > 0) {
+								parentItem.append("<ul>");
+								$.each(items, function(index, value) {
+									parentItem.find(">ul").append(appendItem(value));
+								});
+								parentItem.append("</ul>");
+							}
 						}, parentItem.data('id'));
 					}
 				}
@@ -278,9 +291,13 @@ $.fn.treely = function(options) {
 					if(options.dynamicContent) {
 						var parent = $(this).parent('li.parent_li');
 						options.getData(function(items) {
-							$.each(items, function(index, value) {
-								parent.append("<ul>" + appendItem(value) + "</ul>");
-							});
+							if(items && items.length > 0) {
+								parent.append("<ul>");
+								$.each(items, function(index, value) {
+									parent.find("> ul").append(appendItem(value));
+								});
+								parent.append("</ul>");
+							}
 						}, parent.data('id'));
 					}
 					$(this).attr('title', options.i18n.collapseTip)
@@ -298,33 +315,35 @@ $.fn.treely = function(options) {
 		});
 
 		if(options.selectable) {
-			$(treely).find('li > span > a').attr('title', options.i18n.selectTip);
-			$(treely).find('li > span > a').on("click touchstart", function(event) {
+			treely.find('li > span > a').attr('title', options.i18n.selectTip);
+			treely.on("click touchstart", "li > span > a", function(event) {
 				var li = $(this).parent().parent();
 				if(li.hasClass('li_selected')) {
+					options.doOnItemDeselected.call(this, li.data("id"));
 					$(this).attr('title', options.i18n.selectTip);
 					$(li).removeClass('li_selected');
 				} else {
-					$(treely).find('li.li_selected').removeClass('li_selected');
+					options.doOnItemSelected.call(this, li.data("id"));
+					treely.find('li.li_selected').removeClass('li_selected');
 					$(this).attr('title', options.i18n.unselectTip);
 					$(li).addClass('li_selected');
 				}
 
 				if(options.deletable || options.editable || options.addable) {
-					var selected = getSelectedItems($(treely));
+					var selected = getSelectedItems(treely);
 					if(options.editable) {
 						if(selected.length <= 0 || selected.length > 1) {
-							$(treely).find('.treely-toolbar .edit > button').addClass('disabled');
+							treely.find('.treely-toolbar .edit > button').addClass('disabled');
 						} else {
-								$(treely).find('.treely-toolbar .edit > button').removeClass('disabled');
+							treely.find('.treely-toolbar .edit > button').removeClass('disabled');
 						}
 					}
 
 					if(options.deletable) {
 						if(selected.length <= 0 || selected.length > 1) {
-							$(treely).find('.treely-toolbar .remove > button').addClass('disabled');
+							treely.find('.treely-toolbar .remove > button').addClass('disabled');
 						} else {
-							$(treely).find('.treely-toolbar .remove > button').removeClass('disabled');
+							treely.find('.treely-toolbar .remove > button').removeClass('disabled');
 						}
 					}
 				}
@@ -333,8 +352,8 @@ $.fn.treely = function(options) {
 			});
 		}
 		
-		$(treely).find('li > span').on('novadoubletap dblclick', function(event) {
-			options.doOnDoubleTap.call(this, arguments);
+		treely.on('novadoubletap dblclick', 'li > span', function(event) {
+			options.doOnDoubleTap.call(this, $(event.target).parents("li").data("id"));
 			event.stopPropagation();
 		});
 	});
